@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 String? errorMessage = '';
 bool isLogin = true;
+bool withoutLogin = false;
 
 final TextEditingController _controllerEmail = TextEditingController();
 final TextEditingController _controllerPassword = TextEditingController();
@@ -97,11 +98,14 @@ Widget _errorMessage() {
 
 
 
-Widget _submitButton(){
-  return ElevatedButton(
-    onPressed: isLogin? signInWithEmailAndPassword : createUserWithEmailAndPassword,
-     child: Text(isLogin ? 'Login' : 'Register'),
-     );
+Widget _submitButton() {
+  return Container(
+    width: double.infinity, // Setzen der Breite auf die maximale Breite
+    child: ElevatedButton(
+      onPressed: isLogin ? signInWithEmailAndPassword : createUserWithEmailAndPassword,
+      child: Text(isLogin ? 'Login' : 'Register'),
+    ),
+  );
 }
 
 Widget _loginOrRegisterButton() {
@@ -111,9 +115,10 @@ Widget _loginOrRegisterButton() {
         isLogin = !isLogin;
       });
     },
+    
     child: RichText(
       text: TextSpan(
-        text: isLogin ? 'Register instead' : 'Login instead',
+        text: isLogin ? 'Don´t have a Account? Register here' : 'Already have a Account? Login here',
         style: TextStyle(
           color: Colors.white, // Schriftfarbe weiß
           decoration: TextDecoration.underline, // Unterstrich hinzufügen
@@ -124,6 +129,27 @@ Widget _loginOrRegisterButton() {
 }
 
 
+Widget _WhitoutLogin() {
+  return TextButton(
+    onPressed: () {
+      setState(() {
+        withoutLogin = !withoutLogin;
+      });
+    },
+    child: RichText(
+      text: TextSpan(
+        text: 'Go on whitout Login ->',
+        style: TextStyle(
+          color: Colors.white, // Schriftfarbe weiß
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          decoration: TextDecoration.underline, // Unterstrich hinzufügen
+        ),
+      ),
+    ),
+  );
+}
+
 @override
 Widget build(BuildContext context){
   return Scaffold(
@@ -131,16 +157,26 @@ Widget build(BuildContext context){
     appBar: AppBar(
       backgroundColor: Colors.transparent, // Transparente Hintergrundfarbe der AppBar
       elevation: 0, // Kein Schatten
-      title: Text(
-        isLogin ? 'Login' : 'Register',
+      centerTitle: true,
+            title: Text(
+        isLogin ? 'Login' : 'Register', // Moderne Überschrift für Anmeldung und Registrierung
+       
         style: TextStyle(
           color: Colors.white, // Schriftfarbe der Überschrift
           fontWeight: FontWeight.bold,
-          fontSize: 30, 
+          fontSize: 40,
+          shadows: [
+            Shadow(
+              blurRadius: 6,
+              color: Colors.white,
+              offset: Offset(0, 0),
+            ),
+          ],
+          fontFamily: 'Raleway', // Beispiel für eine moderne Schriftart (muss im pubspec.yaml definiert sein)
         ),
       ),
-      centerTitle: true, // Zentrierte Überschrift
     ),
+  
     body: Stack(
       children: [
         // Hintergrund
@@ -159,11 +195,12 @@ Widget build(BuildContext context){
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              _entryField('email', _controllerEmail),
-              _passwordField('password', _controllerPassword),
+              _entryField('Email', _controllerEmail),
+              _passwordField('Password', _controllerPassword),
               _errorMessage(),
               _submitButton(),
-              _loginOrRegisterButton()
+              _loginOrRegisterButton(),
+              _WhitoutLogin(),
             ],
           ),
         ),
