@@ -74,6 +74,14 @@ class Navbar extends StatelessWidget {
         title: const Text('Settings'),
         onTap: () => print('Upload tapped'),
       ),
+      
+      ListTile( 
+        leading:const  Icon(Icons.create),
+        title: const Text('Create your Shop'),
+        onTap: () => print('Upload tapped'),
+      ),
+
+
 
 ListTile(
   leading: const Icon(Icons.location_city),

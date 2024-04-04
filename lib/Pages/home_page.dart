@@ -4,7 +4,7 @@ import 'package:test1/Pages/navbar.dart';
 import 'package:test1/auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-
+import 'search_page.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -22,14 +22,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getLocation1();
+    getLocation();
   }
 
   Future<void> signOut() async {
     await Auth().signOut();
   }
 
- void getLocation1() async {
+ void getLocation() async {
     
     permission = await Geolocator.requestPermission();
     position = await Geolocator.getCurrentPosition(
@@ -69,27 +69,36 @@ try {
   }
 
 @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    drawer: Navbar(),
-    appBar: AppBar(
-    title: Text('${city ?? ""}${street ?? ""}' == "" ? "Unknown" : '${city ?? ""}${" "}${street ?? ""}${'▼'}'),
-      backgroundColor: Colors.orange,
-    ),
-    body: Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ElevatedButton(
-            onPressed: getLocation1,
-            child: Text('Get Location'),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: Navbar(),
+      appBar: AppBar(
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SearchPage()), // Navigiere zur SearchPage
+            );
+          },
+          child: Text(
+            '${city ?? ""}${street ?? ""}' == "" ? "Unknown" : '${city ?? ""}${" "}${street ?? ""}${'▼'}',
           ),
-          // Weitere Widgets hier...
-        ],
+        ),
+        backgroundColor: Colors.orange,
       ),
-    ),
-  );
-}
-
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ElevatedButton(
+              onPressed: getLocation,
+              child: Text('Get Location'),
+            ),
+            // Weitere Widgets hier...
+          ],
+        ),
+      ),
+    );
+  }
 }
